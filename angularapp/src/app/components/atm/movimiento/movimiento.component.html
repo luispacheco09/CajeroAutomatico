@@ -1,0 +1,33 @@
+<!-- <div>
+    <h2>Retiro de dinero</h2>
+    <label>Monto:</label>
+    <input type="number" [(ngModel)]="monto" required />
+    <button (click)="realizarRetiro()">Realizar Retiro</button>
+</div>
+ -->
+<div class="mb-3">
+    <h2>Retiro de dinero</h2>
+
+    <label for="exampleInputEmail1" class="form-label">Monto:</label>
+    <input type="number" class="form-control" id="exampleInputEmail1" [(ngModel)]="monto" required>
+</div>
+
+<button type="submit" class="btn btn-primary" (click)="realizarRetiro()">Realizar Retiro</button>
+
+
+
+
+<!-- <div>
+    <h2>Retiro de dinero</h2>
+    <label>Monto:</label>
+    <input type="number" [(ngModel)]="monto" required />
+    <button (click)="realizarRetiro()">Realizar Retiro</button>
+
+    <!-- Muestra las denominaciones solo si existen -->
+<!--     <div *ngIf="denominaciones">
+        <h3>Denominaciones entregadas:</h3>
+        <ul>
+            <li *ngFor="let denominacion of denominaciones">{{ denominacion }}</li>
+        </ul>
+    </div> -->
+<!-- </div> --> --> -->
