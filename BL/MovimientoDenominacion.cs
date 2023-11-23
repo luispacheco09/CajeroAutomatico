@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace BL
 {
     public class MovimientoDenominacion
     {
-        public static ML.Result MovimientoDenominaciones(DL.MovimientoDenominacion movimientoDenominacion, int? monto)
+        public static ML.Result MovimientoDenominaciones(int IdMovimiento )
         {
             ML.Result result = new ML.Result();
 
@@ -16,51 +17,36 @@ namespace BL
             {
                 try
                 {
-                    DL.MovimientoDenominacion movimientoDL = new DL.MovimientoDenominacion();
 
-                    if (monto != null)
+                    var listaMD = (from movimientoDenominacionDL in context.MovimientoDenominacions
+                                 where movimientoDenominacionDL.IdMovimiento == IdMovimiento
+                                 select new
+                                 {
+                                     IdMovimientoDenominacion = movimientoDenominacionDL.IdMovimientoDenominacion,
+                                     IdMovimiento = movimientoDenominacionDL.IdMovimiento,
+                                     IdDenominacion = movimientoDenominacionDL.IdDenominacion,
+                                     Cantidad = movimientoDenominacionDL.Cantidad
+                                 }).ToList();
+                    if (listaMD != null && listaMD.Count > 0)
                     {
-                        int? cantidad = 0;
-                        cantidad = monto / 1000;
-                        if (cantidad > 0 & cantidad != '.')
+                        result.Objects = new List<object>();
+                        foreach (var obj in listaMD)
                         {
-                            movimientoDL.Cantidad = cantidad;
-                            movimientoDL.IdDenominacion = 1;
+                            DL.MovimientoDenominacion movimientoDenominacion = new DL.MovimientoDenominacion();
+                            movimientoDenominacion.IdMovimientoDenominacion = obj.IdMovimientoDenominacion;
+                            movimientoDenominacion.IdMovimiento = obj.IdMovimiento;
+                            movimientoDenominacion.IdDenominacion = obj.IdDenominacion;
+                            movimientoDenominacion.Cantidad = obj.Cantidad;
+
+                            result.Objects.Add(movimientoDenominacion);
                         }
-                        else
-                        {
-                            cantidad = monto / 500;
-                            if (cantidad > 0 & cantidad != '.')
-                            {
-                                movimientoDL.Cantidad = cantidad;
-                                movimientoDL.IdDenominacion = 2;
-                            }
-                        }
-                    }
-
-                    movimientoDL.IdMovimiento = movimientoDenominacion.IdMovimiento;
-                    //
-                    //movimientoDL.IdDenominacion = movimientoDenominacion.IdDenominacion;
-                    //
-
-                    //movimientoDL.Cantidad = movimientoDenominacion.Cantidad;
-
-
-
-                    context.Add(movimientoDL);
-
-                    int RowsAffected = context.SaveChanges();
-                    if (RowsAffected > 0)
-                    {
                         result.Correct = true;
                     }
                     else
                     {
                         result.Correct = false;
-                        result.ErrorMessage = "No se pudo registrar el movimiento";
+                        result.ErrorMessage = "No se encontraron los datos de esos movimientos";
                     }
-
-
                 }
                 catch (Exception ex)
                 {

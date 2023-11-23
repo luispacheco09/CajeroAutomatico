@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AtmService } from '../../../services/atm.service';
 //import { ToastrService } from 'ngx-toastr';
@@ -10,9 +11,9 @@ import { Atm } from '../../../models/atm';
   templateUrl: './cajero.component.html',
   styleUrls: ['./cajero.component.css']
 })
-export class CajeroComponent {
+export class CajeroComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  suscription?: Subscription;
+  subscription?: Subscription;
   producto?: Atm;
   idProducto?: number;
   Saldo?: number;
@@ -24,20 +25,26 @@ export class CajeroComponent {
 
     })
   }
-
   ngOnInit() {
     this.obtenerSaldoCajero();
+    this.subscription = this.atmService.observeSaldoCajero().subscribe(saldo => {
+      this.Saldo = saldo;
+    });
   }
 
-   obtenerSaldoCajero() {
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
+
+  obtenerSaldoCajero() {
     this.atmService.getSaldoCajero().subscribe(
       (result: any) => {
-        this.Saldo = result.object.saldo; 
+        this.Saldo = result.object.saldo;
       },
       error => {
         console.error('Error al obtener el saldo del cajero', error);
       }
     );
   }
-
 }

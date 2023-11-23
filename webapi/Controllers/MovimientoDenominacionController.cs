@@ -7,10 +7,10 @@ namespace webapi.Controllers
     [ApiController]
     public class MovimientoDenominacionController : ControllerBase
     {
-        [HttpPost]
-        public async Task<ActionResult<DL.MovimientoDenominacion>> PostMovimientoDenominacion(DL.MovimientoDenominacion movimiento)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DL.MovimientoDenominacion>> GetMovimientoDenominacion(int id)
         {
-            ML.Result result = BL.MovimientoDenominacion.MovimientoDenominaciones(movimiento, 1500);
+            ML.Result result = BL.MovimientoDenominacion.MovimientoDenominaciones(id);
             if (result.Correct)
             {
                 return Ok(result);

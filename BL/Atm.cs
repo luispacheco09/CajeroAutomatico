@@ -22,7 +22,7 @@ namespace BL
                     if (query != null)
                     {
                         ML.Atm atm = new ML.Atm();
-                        //atm.IdAtm = query.IdAtm;
+                        atm.IdAtm = query.IdAtm;
                         atm.Saldo = query.Saldo;
 
                         result.Object = atm;
